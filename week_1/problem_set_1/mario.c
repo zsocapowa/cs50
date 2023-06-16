@@ -14,7 +14,8 @@ int get_size(void)
 
 void print_line(int n, char mark)
 {
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) 
+    {
         printf("%c", mark);
     }
 }
