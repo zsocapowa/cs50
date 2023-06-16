@@ -15,14 +15,14 @@ int get_size(void)
 void print_line(int n, char mark)
 {
     for (int i = 0; i < n; i++) {
-        printf("%c",mark);
+        printf("%c", mark);
     }
 }
 
 int main(void)
 {
     char hashmark = '#';
-    char spacemark = '-';
+    char spacemark = ' ';
 
 
 
@@ -36,13 +36,12 @@ int main(void)
         print_line(num_spaces, spacemark);
         print_line(num_hashmarks, hashmark);
 
-        printf(" ");
+        printf("  ");
 
         print_line(num_hashmarks, hashmark);
-        print_line(num_spaces, spacemark);
+        // print_line(num_spaces, spacemark);
 
         printf("\n");
-        
         num_hashmarks++;
     }
 }
