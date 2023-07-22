@@ -54,7 +54,7 @@ void convert_int_to_binary(int ascii_value)
 
 
     
-    for (int i = 8; i >= 0; i--)
+    for (int i = 7; i >= 0; i--)
     {
         print_bulb(binary_array[i]);
     }
