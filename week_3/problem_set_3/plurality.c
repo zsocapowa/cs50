@@ -118,7 +118,7 @@ void print_winner(void)
         {
             continue;
         }
-        printf("%s\n",candidates[i].name);
+        printf("%s\n", candidates[i].name);
     }
     return;
 }
