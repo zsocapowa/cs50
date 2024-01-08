@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     char *infile = argv[1];
     char *outfile = argv[2];
 
-    FILE *inptr = fopen(infile, "r");
+    FILE *inptr = fopen(infile, "r+");
     if (inptr == NULL)
     {
         printf("Could not open %s.\n", infile);
@@ -28,32 +28,70 @@ int main(int argc, char *argv[])
     WAVHEADER wh;
     fread(&wh, sizeof(WAVHEADER), 1, inptr);
 
-    
+    printf("Current File Position: %ld\n", ftell(inptr));
 
-    // Use check_format to ensure WAV format
-    // TODO #4
+    if (check_format(wh) != 0)
+    {
+        printf("Input is not a WAV file.\n");
+        return 1;
+    }
 
-    // Open output file for writing
-    // TODO #5
+    FILE *outptr = fopen(outfile, "w");
+    if (outptr == NULL)
+    {
+        fclose(inptr);
+        printf("Could not create %s.\n", outfile);
+        return 1;
+    }
 
-    // Write header to file
-    // TODO #6
+    fwrite(&wh, sizeof(WAVHEADER), 1, outptr);
+    fclose(outptr);
 
-    // Use get_block_size to calculate size of block
-    // TODO #7
+    int block_size = get_block_size(wh);
+    printf("Block sizeee: %i\n", block_size);
 
-    // Write reversed audio to file
-    // TODO #8
+    // Find the size of the file
+    fseek(inptr, 0, SEEK_END);
+    long input_file_size = ftell(inptr);
+
+    outptr = fopen(outfile, "a");
+    if (outptr == NULL)
+    {
+        fclose(inptr);
+        printf("Could not reopen %s.\n", outfile);
+        return 1;
+    }
+
+    int start = 0;
+
+    while (ftell(inptr) > sizeof(WAVHEADER)) {
+
+        fseek(inptr, -block_size, SEEK_CUR);
+        int data_buffer[block_size];
+        fread(&data_buffer, block_size, 1, inptr);
+        fwrite(&data_buffer, block_size, 1, outptr);
+        fseek(inptr, -block_size, SEEK_CUR);
+    }
+    fclose(inptr);
+    fclose(outptr);
 }
+
 
 int check_format(WAVHEADER header)
 {
-    // TODO #4
+    char *format = "WAVE";
+    for (int i = 0; i < 4; i++)
+    {
+        if (header.format[i] != format[i]) {
+            return 1;
+        }
+    }
     return 0;
 }
 
 int get_block_size(WAVHEADER header)
 {
-    // TODO #7
-    return 0;
+    int block_size = (header.numChannels * header.bitsPerSample) / 8;
+    printf("Block size: %i\n", block_size);
+    return block_size;
 }
