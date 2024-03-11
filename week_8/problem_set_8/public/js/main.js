@@ -4,7 +4,6 @@ document.addEventListener("click", (e) => {
 	if (!target.matches("#navbarSupportedContent a")) {
 		return;
 	}
-	console.log("eeeeeeb", e)
 	e.preventDefault();
 	urlRoute();
 });
@@ -34,7 +33,6 @@ const urlRoute = (event) => {
 	// window.history.pushState(state, unused, target link);
 	console.log("reeef", event.target.href)
 	window.history.pushState({}, "", event.target.href);
-	console.log("history", window.history)
 	urlLocationHandler();
 };
 
