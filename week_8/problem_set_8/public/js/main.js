@@ -1,3 +1,5 @@
+import { loadFormData } from './contact-form.js';
+
 // create document click that watches the nav links only
 document.addEventListener("click", (e) => {
 	const { target } = e;
@@ -51,6 +53,10 @@ const urlLocationHandler = async () => {
 	document.getElementById("content").innerHTML = html;
 	// set the title of the document to the title of the route
 	document.title = route.title;
+
+	if (location === "/contact") {
+        loadFormData(); // Call the loadFormData function
+    }
 };
 
 // add an event listener to the window that watches for url changes
@@ -59,6 +65,3 @@ window.onpopstate = urlLocationHandler;
 window.route = urlRoute;
 // call the urlLocationHandler function to handle the initial url
 urlLocationHandler();
-
-
-// http-server homepage -p 8080

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  spa_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./public:/usr/share/nginx/html:rw
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+volumes:
+  public_data:
+  nginx_config:
