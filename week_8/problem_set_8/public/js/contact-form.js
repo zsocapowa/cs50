@@ -3,7 +3,7 @@ export function loadFormData() {
     if (location != '/contact') {
         return;
     }
-    const storedData = localStorage.getItem('formData');
+    const storedData = localStorage.getItem('contactFormData');
 
     if (storedData) {
         const formData = JSON.parse(storedData);
@@ -17,7 +17,7 @@ export function loadFormData() {
 
 document.addEventListener("change", (e) => {
     const { target } = e;
-    if (!target.matches("#contact-form input")) {
+    if (!target.matches("#contact-form input, #contact-form textarea")) {
         return;
     }
     e.preventDefault();
@@ -27,7 +27,7 @@ document.addEventListener("change", (e) => {
 
 function saveFormData(target) {
     let formData = {};
-    const storedData = localStorage.getItem('formData');
+    const storedData = localStorage.getItem('contactFormData');
     if (storedData === null) {
         formData[target.id] = target.value;
     }
@@ -35,6 +35,5 @@ function saveFormData(target) {
         formData = JSON.parse(storedData);
         formData[target.id] = target.value;
     }
-    localStorage.setItem('formData', JSON.stringify(formData));
+    localStorage.setItem('contactFormData', JSON.stringify(formData));
 }
-

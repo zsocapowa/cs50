@@ -32,8 +32,6 @@ const urlRoutes = {
 const urlRoute = (event) => {
 	event = event || window.event; // get window.event if event argument not provided
 	event.preventDefault();
-	// window.history.pushState(state, unused, target link);
-	console.log("reeef", event.target.href)
 	window.history.pushState({}, "", event.target.href);
 	urlLocationHandler();
 };
@@ -55,8 +53,10 @@ const urlLocationHandler = async () => {
 	document.title = route.title;
 
 	if (location === "/contact") {
-        loadFormData(); // Call the loadFormData function
-    }
+		loadFormData(); // Call the loadFormData function
+		document.getElementById("contact-submit").addEventListener("click", () => localStorage.setItem("contactFormSubmitted", true));
+		document.getElementById("content").innerHTML = await fetch("/templates/contact-success.html").then((response) => response.text());
+	}
 };
 
 // add an event listener to the window that watches for url changes
