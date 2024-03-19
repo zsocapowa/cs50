@@ -1,28 +1,50 @@
 <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 fw-normal pb-4">Kapcsolat</h1>
-    <p class="lead">Amennyiben szeretnél visszajelzést küldeni, vagy kérdésed van, <br>kérlek töltsd ki az alábbi
-        űrlapot.</p>
+  <h1 class="display-4 fw-normal pb-4">Kapcsolat</h1>
+  <p class="lead">
+    Amennyiben szeretnél visszajelzést küldeni, vagy kérdésed van, <br />kérlek
+    töltsd ki az alábbi űrlapot.
+  </p>
 </div>
-<div class="modal-dialog" style="pointer-events: auto;">
-    <form action="" method="POST" id="contact-form">
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="last_name">Vezetéknév</label>
-                <input type="text" class="form-control" id="last_name" name="last_name">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="first_name">Keresztnév</label>
-                <input type="text" class="form-control" id="first_name" name="first_name">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="mail">E-mail cím</label>
-            <input type="email" class="form-control" id="mail" name="mail">
-        </div>
-        <div class="form-group">
-            <label for="message">Üzenet</label>
-            <textarea class="form-control" id="message" name="message" rows="4"></textarea>
-        </div>
-        <button type="button" class="btn btn-primary" id="contact-submit">Küldés</button>
-    </form>
+<div class="modal-dialog" style="pointer-events: auto">
+  <form action="" method="POST" id="contact-form">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="last_name">Vezetéknév</label>
+        <input
+          type="text"
+          class="form-control"
+          id="last_name"
+          name="last_name"
+          required
+        />
+      </div>
+      <div class="form-group col-md-6">
+        <label for="first_name">Keresztnév</label>
+        <input
+          type="text"
+          class="form-control"
+          id="first_name"
+          name="first_name"
+          required
+        />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="mail">E-mail cím</label>
+      <input type="email" class="form-control" id="mail" name="mail" required />
+    </div>
+    <div class="form-group">
+      <label for="message">Üzenet</label>
+      <textarea
+        class="form-control"
+        id="message"
+        name="message"
+        rows="4"
+        required
+      ></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" id="contact-submit">
+      Küldés
+    </button>
+  </form>
 </div>

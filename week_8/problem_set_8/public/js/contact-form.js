@@ -15,6 +15,11 @@ export function loadFormData() {
 };
 
 
+export function cleanFormData() {
+    localStorage.removeItem("contactFormData");
+    localStorage.removeItem("contactFormSubmitted");
+}
+
 document.addEventListener("change", (e) => {
     const { target } = e;
     if (!target.matches("#contact-form input, #contact-form textarea")) {
