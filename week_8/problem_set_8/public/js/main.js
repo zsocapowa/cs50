@@ -36,39 +36,52 @@ const urlRoute = (event) => {
   urlLocationHandler();
 };
 
+function enableFormValidation() {
+  let form = document.querySelector("#contact-form");
+  form.addEventListener(
+    "submit",
+    function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      } else {
+        localStorage.setItem("contactFormSubmitted", true);
+        window.location.href = "/contact";
+      }
+      form.classList.add("was-validated");
+    },
+    false
+  );
+}
+
 async function fetchAndDisplayHTML(path, elementId) {
   const html = await fetch(path).then((response) => response.text());
   document.getElementById(elementId).innerHTML = html;
 }
 
-// create a function that handles the url location
+async function handleContactRoute() {
+  if (localStorage.getItem("contactFormSubmitted") === "true") {
+    await fetchAndDisplayHTML("/templates/contact-success.html", "content");
+    document
+    .getElementById("new-contact-form")
+    .addEventListener("click", cleanFormData);
+  } else {
+    await fetchAndDisplayHTML("/templates/contact.html", "content");
+    loadFormData();
+    enableFormValidation();
+  }
+}
+
 const urlLocationHandler = async () => {
-  let location = window.location.pathname; // get the url path
-  // if the path length is 0, set it to primary page route
+  let location = window.location.pathname;
   if (location.length == 0) {
     location = "/";
   }
-  // get the route object from the urlRoutes object
+
   const route = urlRoutes[location] || urlRoutes["404"];
 
   if (location === "/contact") {
-    if (localStorage.getItem("contactFormSubmitted") === "true") {
-      await fetchAndDisplayHTML("/templates/contact-success.html", "content");
-      document
-        .getElementById("new-contact-form")
-        .addEventListener("click", cleanFormData);
-      console.log("aaa")
-    } else {
-      await fetchAndDisplayHTML("/templates/contact.html", "content");
-      loadFormData();
-      document
-        .getElementById("contact-submit")
-        .addEventListener("click", () => {
-          localStorage.setItem("contactFormSubmitted", true);
-          window.location.href = "/contact";
-        });
-      console.log("bbb")
-    }
+    handleContactRoute();
   } else {
     await fetchAndDisplayHTML(route.template, "content");
     document.title = route.title;
