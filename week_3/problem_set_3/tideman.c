@@ -1,5 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <string.h>
 
 // Max number of candidates
 #define MAX 9
@@ -15,8 +16,7 @@ typedef struct
 {
     int winner;
     int loser;
-}
-pair;
+} pair;
 
 // Array of candidates
 string candidates[MAX];
@@ -116,11 +116,10 @@ void record_preferences(int ranks[])
     for (int i = 0; i < candidate_count - 1; i++)
     {
         int candidate_id_i = ranks[i];
-        int next_rank = i + 1;
-        for (next_rank; next_rank < candidate_count; next_rank++)
+        for (int j = i + 1; j < candidate_count; j++)
         {
-            int candidate_id_y = ranks[next_rank]
-            preferences[candidate_id_i][candidate_id_y]++
+            int candidate_id_y = ranks[j];
+            preferences[candidate_id_i][candidate_id_y]++;
         }
     }
     return;
@@ -131,8 +130,7 @@ void add_pairs(void)
 {
     for (int i = 0; i < candidate_count - 1; i++)
     {
-        int y = i + 1;
-        for (y; y < candidate_count; y++)
+        for (int y = i + 1; y < candidate_count; y++)
         {
             int a_votes = preferences[i][y];
             int b_votes = preferences[y][i];
@@ -142,15 +140,15 @@ void add_pairs(void)
             }
             if (a_votes > b_votes)
             {
-                pairs[pair_count].winner = i
-                pairs[pair_count].loser = y
+                pairs[pair_count].winner = i;
+                pairs[pair_count].loser = y;
             }
             else
             {
-                pairs[pair_count].winner = y
-                pairs[pair_count].loser = i
+                pairs[pair_count].winner = y;
+                pairs[pair_count].loser = i;
             }
-            pair_count++
+            pair_count++;
         }
     }
     return;
@@ -159,11 +157,11 @@ void add_pairs(void)
 // Sort pairs in decreasing order by strength of victory
 void sort_pairs(void)
 {
-    for (int i = 0; i < pair_count -1; i++)
+    for (int i = 0; i < pair_count - 1; i++)
     {
         int w_idx = pairs[i].winner;
         int l_idx = pairs[i].loser;
-        int w_votes = preferences[w_idx][y_idx];
+        int w_votes = preferences[w_idx][l_idx];
         for (int y = i + 1; y < pair_count; y++)
         {
             int cw_idx = pairs[y].winner;
@@ -171,30 +169,76 @@ void sort_pairs(void)
             int c_votes = preferences[cw_idx][cl_idx];
             if (c_votes > w_votes)
             {
-                pair temp_pair;
-                temp_pair.winner = w_idx;
-                temp_pair.loser = l_idx;
                 pairs[i].winner = pairs[y].winner;
                 pairs[i].loser = pairs[y].loser;
                 pairs[y].winner = w_idx;
                 pairs[y].loser = l_idx;
+                w_idx = cw_idx;
+                l_idx = cl_idx;
+                w_votes = c_votes;
             }
         }
     }
     return;
 }
 
+bool cycle_detected(int og_winner, int loser)
+{
+    bool is_cycle = false;
+    if (og_winner == loser)
+    {
+        return true;
+    }
+    for (int i = 0; i < MAX; i++)
+    {
+        if (locked[loser][i])
+        {
+            is_cycle = cycle_detected(og_winner, i);
+            if (is_cycle)
+            {
+                break;
+            }
+        }
+    }
+    return is_cycle;
+}
+
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    // TODO
+    for (int i = 0; i < pair_count; i++)
+    {
+        int og_winner = pairs[i].winner;
+        int loser = pairs[i].loser;
+        bool is_cycle = cycle_detected(og_winner, loser);
+        if (!is_cycle)
+        {
+            locked[og_winner][loser] = 1;
+        }
+    }
     return;
 }
 
 // Print the winner of the election
 void print_winner(void)
 {
-    // TODO
+    for (int y = 0; y < candidate_count; y++)
+    {
+        bool arrow_towards = false;
+        for (int i = 0; i < candidate_count; i++)
+        {
+            if (locked[i][y] == 1)
+            {
+                arrow_towards = true;
+                break;
+            }
+        }
+        if (!arrow_towards)
+        {
+            printf("%s\n", candidates[y]);
+            break;
+        }
+    }
+
     return;
 }
-
